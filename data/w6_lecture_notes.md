@@ -2,10 +2,6 @@
 doc_id: AIPwP-W06
 course: AIPwP
 title: Tuần 6 — Agent Loop, ReAct & Agent Memory
-version: 1
-date: 2026-09-20
-owner: Khoa CNTT / GV phụ trách
-status: current
 week: 6
 ---
 

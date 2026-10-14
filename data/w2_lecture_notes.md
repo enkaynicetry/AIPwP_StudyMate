@@ -2,10 +2,6 @@
 doc_id: AIPwP-W02
 course: AIPwP
 title: Tuần 2 — LLM API Access & Integration
-version: 1
-date: 2026-08-23
-owner: Khoa CNTT / GV phụ trách
-status: current
 week: 2
 ---
 

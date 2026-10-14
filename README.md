@@ -6,7 +6,7 @@
 
 ---
 
-## 1. Cấu trúc thư mục hiện tại (Khung sườn khởi tạo)
+## 1. Cấu trúc thư mục dự án
 
 ```text
 AIPwP/
@@ -18,43 +18,51 @@ AIPwP/
 │   ├── w5_lecture_notes.md                # Bài giảng Tuần 5: RAG Evaluation & Groundedness
 │   └── w6_lecture_notes.md                # Bài giảng Tuần 6: Agent Loop, ReAct & Agent Memory
 │
-├── src/studymate/                         # Khung mã nguồn dự án
-│   └── __init__.py                        # Khởi tạo package studymate
+├── src/studymate/                         # Mã nguồn gói studymate
+│   ├── __init__.py                        # Khởi tạo package studymate
+│   ├── config.py                          # Quản lý cấu hình hệ thống & nạp biến môi trường
+│   ├── models.py                          # Định nghĩa cấu trúc dữ liệu OOP (@dataclass)
+│   └── rag/                               # Phân hệ RAG (Retrieval-Augmented Generation)
+│       ├── __init__.py
+│       └── corpus.py                      # Tách YAML front-matter & chia chunk tài liệu markdown
+│
+├── tests/                                 # Thư mục kiểm thử (Unit tests)
+│   └── test_corpus.py                     # Kiểm thử đọc front-matter và nạp toàn bộ bài giảng
 │
 ├── .env.example                           # Mẫu cấu hình API key
-├── .gitignore                             # Cấu hình loại trừ file rác, cache, môi trường ảo
-├── pyproject.toml                         # Khai báo cài đặt gói và dependencies
-└── README.md                              # Tài liệu giới thiệu dự án & cấu trúc
+├── .gitignore                             # Cấu hình loại trừ file cache, môi trường ảo
+├── pyproject.toml                         # Khai báo cấu hình gói và dependencies
+└── README.md                              # Tài liệu hướng dẫn & cấu trúc dự án
 ```
 
 ---
 
 ## 2. Hướng dẫn cài đặt & Thiết lập ban đầu
 
-### Cài đặt môi trường
-Tạo và kích hoạt môi trường ảo Python (>= 3.11):
+### Bước 1: Cài đặt môi trường ảo
+Khởi tạo và kích hoạt môi trường ảo Python (>= 3.11):
 ```bash
 python -m venv .venv
-# Kích hoạt môi trường (Windows PowerShell):
+
+# Kích hoạt trên Windows PowerShell:
 .venv\Scripts\Activate.ps1
 
-# Cài đặt package ở chế độ editable
+# Cài đặt các gói phụ thuộc ở chế độ editable:
 pip install -e .
 ```
 
-### Cấu hình API Key
-Tạo file `.env` từ file mẫu `.env.example`:
+### Bước 2: Cấu hình biến môi trường
+Sao chép `.env.example` thành `.env` và điền các khóa API:
 ```ini
 GROQ_API_KEY=your_groq_api_key_here
 JINA_API_KEY=your_jina_api_key_here
-LLM_MODEL=llama-3.3-70b-versatile
+LLM_MODEL=openai/gpt-oss-20b
 ```
 
----
 
 ## 3. Kế hoạch phát triển các module tiếp theo
 
-- **Module RAG (`src/studymate/rag/`):** Tải và xử lý bài giảng, chia chunk theo ngữ cảnh, xây dựng vector store (Jina embeddings) và tìm kiếm kết hợp Hybrid Search (BM25 + Dense).
-- **Module LLM (`src/studymate/llm.py`):** Tích hợp Groq API với cơ chế retry, xử lý lỗi và thống kê token usage.
-- **Tools (`tools/`):** Script tạo chỉ mục offline cho cơ sở tri thức bài giảng.
-- **Tests (`tests/`):** Bộ kiểm thử đọc dữ liệu bài giảng và kiểm thử truy vấn tìm kiếm RAG.
+- **Module Vector Store & Search (`src/studymate/rag/`):** Tích hợp Jina AI embedding (`store.py`), thuật toán tìm kiếm kết hợp Hybrid Search BM25 + Dense vector (`hybrid_search.py`, `search.py`).
+- **Module LLM (`src/studymate/llm.py`):** Kết nối Groq API gọi LLM xử lý câu hỏi sinh viên, quản lý retry và thống kê token usage.
+- **Tools (`tools/`):** Script `build_index.py` tạo chỉ mục vector offline lưu tại `data/index.json`.
+- **Giao diện dòng lệnh (CLI):** Cung cấp giao diện tương tác trực tiếp cho sinh viên hỏi đáp.
