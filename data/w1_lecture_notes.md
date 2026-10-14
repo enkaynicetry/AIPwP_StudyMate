@@ -2,10 +2,6 @@
 doc_id: AIPwP-W01
 course: AIPwP
 title: Tuần 1 — Python Data Structures for AI
-version: 1
-date: 2026-08-17
-owner: Khoa CNTT / GV phụ trách
-status: current
 week: 1
 ---
 

@@ -2,10 +2,6 @@
 doc_id: AIPwP-W04
 course: AIPwP
 title: Tuần 4 — Building the RAG Pipeline
-version: 1
-date: 2026-08-17
-owner: Khoa CNTT / GV phụ trách
-status: current
 week: 4
 ---
 

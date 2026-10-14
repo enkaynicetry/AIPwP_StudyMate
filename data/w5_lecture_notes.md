@@ -2,10 +2,6 @@
 doc_id: AIPwP-W05
 course: AIPwP
 title: Tuần 5 — RAG Evaluation & Groundedness
-version: 1
-date: 2026-09-20
-owner: Khoa CNTT / GV phụ trách
-status: current
 week: 5
 ---
 

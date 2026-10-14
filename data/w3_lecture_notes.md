@@ -2,10 +2,6 @@
 doc_id: AIPwP-W03
 course: AIPwP
 title: Tuần 3 — RAG Foundations: Documents & Embeddings
-version: 1
-date: 2026-08-17
-owner: Khoa CNTT / GV phụ trách
-status: current
 week: 3
 ---
 
