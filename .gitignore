@@ -1,0 +1,15 @@
+# Python cache & build files
+__pycache__/
+*.pyc
+*.egg-info/
+build/
+dist/
+
+# Virtual environments & lock files
+.venv/
+uv.lock
+
+# Local secrets & logs
+.env
+*.log
+.pytest_cache/

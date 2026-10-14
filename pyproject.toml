@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "studymate"
+version = "0.1.0"
+description = "AI Study Assistant for Course Materials (HCMUTE AIPwP Final Project)"
+authors = [
+    { name = "Student Team" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "groq>=0.18.0",
+    "python-dotenv>=1.0.0",
+    "requests>=2.31.0",
+    "numpy>=1.26.0",
+    "rank-bm25>=0.2.2",
+    "mcp>=2.2.0",
+    "rich>=13.0.0",
+    "pydantic>=2.0.0",
+]
+
+[project.scripts]
+studymate = "studymate.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
