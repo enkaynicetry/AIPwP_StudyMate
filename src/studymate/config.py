@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[2]
 env_path = ROOT / ".env"
 if not env_path.exists() and (ROOT.parent / ".env").exists():
     env_path = ROOT.parent / ".env"
-load_dotenv(env_path)
+load_dotenv(env_path, override=True)
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "").strip()
 JINA_API_KEY = os.getenv("JINA_API_KEY", "").strip()
