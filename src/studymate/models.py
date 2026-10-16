@@ -46,3 +46,14 @@ class Usage:
         self.completion_tokens += completion
         if prompt > self.max_prompt:
             self.max_prompt = prompt
+
+
+# --- Quản lý Ghi chú Học tập & Trạng thái Tool (Side-Effect State) ---
+
+@dataclass
+class StudyNote:
+    note_id: str
+    topic: str
+    content: str
+    week: int = 0
+    created_at: str = ""
