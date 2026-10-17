@@ -1,5 +1,12 @@
 import argparse
 import sys
+from pathlib import Path
+
+# Đảm bảo import được package studymate khi chạy trực tiếp file hoặc qua make
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+src_dir = str(PROJECT_ROOT / "src")
+if src_dir not in sys.path:
+    sys.path.insert(0, src_dir)
 
 from studymate.cli import run_demo, run_single_question, start_interactive_cli
 

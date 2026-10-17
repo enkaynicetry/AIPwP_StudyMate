@@ -30,6 +30,7 @@ STRICT GROUNDING & BEHAVIOR RULES:
 5. Action & Verification: When asked to add or save a study note, first call the write tool (add_study_note), then immediately call the read tool (get_study_notes) to verify the note before giving your Final Answer.
 6. Language: If the user asks in Vietnamese, reply in fluent, natural Vietnamese. If the user asks in English, reply in English.
 7. Efficiency: Do not call search_lesson_plan multiple times with repetitive queries. If the observation contains sufficient facts to answer the question, proceed directly to Final Answer without making redundant tool calls.
+8. Metadata Filtering: If the user's question mentions a specific week (e.g., 'Tuần 1', 'Week 2', 'bài học tuần 4'), pass the integer parameter `week` into `search_lesson_plan(query=..., week=...)` to leverage exact metadata filtering.
 """
 
 def format_tools_doc(tools_list: list[Any]) -> str:
@@ -53,57 +54,39 @@ def format_tools_doc(tools_list: list[Any]) -> str:
     return "\n".join(tools_doc_lines)
 
 def parse_reply(reply: str) -> ParsedReply:
-    """
-    Phân tích cú pháp câu trả lời của model theo chuẩn ReAct:
-    - Bóc tách 'Final Answer: ...'
-    - Bóc tách 'Action: tool_name({...})' (xử lý an toàn khi thiếu dấu ngoặc đóng hoặc JSON lỏng)
-    """
-    # 1. Cắt bỏ nếu model tự sinh Observation (phòng ngừa hallucination)
-    clean_reply = reply.split("Observation:")[0].strip()
+    """Bóc tách 'Final Answer:' hoặc 'Action: tool_name(args)' từ câu trả lời theo mẫu Week 6."""
+    clean = reply.split("Observation:")[0].strip()
 
-    # 2. Kiểm tra Final Answer
-    final_match = re.search(r"Final Answer:\s*(.+)", clean_reply, flags=re.IGNORECASE | re.DOTALL)
+    # 1. Bóc tách Final Answer
+    final_match = re.search(r"Final Answer:\s*(.+)", clean, flags=re.IGNORECASE | re.DOTALL)
     if final_match:
         return ParsedReply(kind="final", text=final_match.group(1).strip())
 
-    # 3. Kiểm tra Action: tool_name(...)
-    # Ngoặc đóng ')' là tùy chọn để model thiếu ngoặc vẫn bóc tách được
-    action_match = re.search(r"Action:\s*([a-zA-Z0-9_]+)\s*\((.*)\)?", clean_reply, flags=re.IGNORECASE | re.DOTALL)
+    # 2. Bóc tách Action: tool_name(...) - hỗ trợ an toàn khi thiếu ngoặc đóng
+    action_match = re.search(r"Action:\s*(\w+)\s*\((.*?)\)?(?:\s*$|\n)", clean, flags=re.IGNORECASE | re.DOTALL)
     if action_match:
         tool_name = action_match.group(1).strip()
-        raw_args = action_match.group(2).strip().rstrip(")")
-
-        args_dict: dict[str, Any] = {}
-        if raw_args:
+        arg_str = action_match.group(2).strip().rstrip(")")
+        args: dict[str, Any] = {}
+        if arg_str:
             try:
-                # Trường hợp 1: JSON chuẩn
-                args_dict = json.loads(raw_args)
+                args = json.loads(arg_str)
             except Exception:
-                try:
-                    # Trường hợp 2: JSON thiếu ngoặc kép quanh key (vd: {query: "..."})
-                    fixed = re.sub(r'([{,]\s*)([a-zA-Z_]\w*)\s*:', r'\1"\2":', raw_args)
-                    fixed = fixed.replace("'", '"')
-                    args_dict = json.loads(fixed)
-                except Exception:
-                    # Trường hợp 3: Tham số dạng key=val (vd: doc_id='AIPwP-W01')
-                    if "=" in raw_args and not raw_args.startswith("{"):
-                        k, v = raw_args.split("=", 1)
-                        args_dict = {k.strip(): v.strip().strip("\"'")}
-                    else:
-                        # Trường hợp 4: Tham số chuỗi trần
-                        clean_str = raw_args.strip("\"'")
-                        if tool_name in ["get_document", "get_document_detail"]:
-                            args_dict = {"doc_id": clean_str}
-                        else:
-                            args_dict = {"query": clean_str}
+                if "=" in arg_str:
+                    k, v = arg_str.split("=", 1)
+                    args = {k.strip(): v.strip().strip("'\"")}
+                elif arg_str.startswith("{") and ":" in arg_str:
+                    fixed = re.sub(r'([{,]\s*)(\w+)\s*:', r'\1"\2":', arg_str).replace("'", '"')
+                    try:
+                        args = json.loads(fixed)
+                    except Exception:
+                        args = {"query": arg_str.strip("'\"")}
+                else:
+                    args = {"query": arg_str.strip("'\"")}
 
-        return ParsedReply(kind="action", name=tool_name, args=args_dict)
+        return ParsedReply(kind="action", name=tool_name, args=args)
 
-    # 4. Định dạng không hợp lệ
-    return ParsedReply(
-        kind="invalid",
-        error="Không tìm thấy định dạng 'Action: tool_name({...})' hoặc 'Final Answer: <kết luận>'."
-    )
+    return ParsedReply(kind="invalid", error="Phản hồi không theo định dạng ReAct.")
 
 if __name__ == "__main__":
     print("=== KIỂM THỬ BỘ HỖ TRỢ AGENT_SUPPORT ===")
