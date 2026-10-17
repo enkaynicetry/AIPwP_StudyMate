@@ -20,7 +20,7 @@ DATA_DIR = ROOT / "data"
 INDEX_PATH = DATA_DIR / "index.json"
 
 # Cấu hình LLM & Agent
-MODEL = os.getenv("LLM_MODEL", "openai/gpt-oss-20b")
+MODEL = os.getenv("LLM_MODEL", "qwen/qwen3.8-27b")
 MAX_STEPS = 10
 OBS_MAX_CHARS = 1500
 

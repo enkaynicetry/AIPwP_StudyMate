@@ -40,6 +40,10 @@ class Usage:
     completion_tokens: int = 0
     max_prompt: int = 0
 
+    @property
+    def total_tokens(self) -> int:
+        return self.prompt_tokens + self.completion_tokens
+
     def add(self, prompt: int, completion: int) -> None:
         self.calls += 1
         self.prompt_tokens += prompt
@@ -47,6 +51,28 @@ class Usage:
         if prompt > self.max_prompt:
             self.max_prompt = prompt
 
+@dataclass
+class ToolSpec:
+    name: str
+    description: str
+    input_schema: dict[str, Any] = field(default_factory=dict)
+    read_only: bool = True
+
+@dataclass
+class ParsedReply:
+    kind: str  # "final", "action", hoặc "invalid"
+    name: str = ""
+    args: dict[str, Any] = field(default_factory=dict)
+    text: str = ""
+    error: str = ""
+
+@dataclass
+class AgentRun:
+    answer: str
+    trace: list[dict[str, Any]] = field(default_factory=list)
+    usage: Usage = field(default_factory=Usage)
+    observations: list[str] = field(default_factory=list)
+    error: str = ""
 
 # --- Quản lý Ghi chú Học tập & Trạng thái Tool (Side-Effect State) ---
 

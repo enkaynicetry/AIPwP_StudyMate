@@ -1,3 +1,4 @@
+import re
 import time
 from typing import Any
 from groq import Groq
@@ -46,7 +47,15 @@ def call_llm(
             if attempt == max_retries:
                 raise RuntimeError(f"Gọi LLM thất bại sau {max_retries} lần thử lại: {error_msg}") from e
 
-            delay = 2 ** attempt
-            time.sleep(delay)
+            # Nếu gặp RateLimit 429 từ Groq, bóc tách thời gian yêu cầu chờ
+            wait_time = 2 ** (attempt + 1)
+            retry_match = re.search(r"try again in ([\d\.]+)s", error_msg, flags=re.IGNORECASE)
+            if retry_match:
+                try:
+                    wait_time = float(retry_match.group(1)) + 1.0
+                except ValueError:
+                    pass
+
+            time.sleep(wait_time)
 
     return ""
