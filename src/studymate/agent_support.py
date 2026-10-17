@@ -29,6 +29,7 @@ STRICT GROUNDING & BEHAVIOR RULES:
 4. Refusal: If the searched documents do not contain the answer, or if the question is out of scope (e.g. topics not taught in the course), your final answer MUST clearly state that the materials do not have this information, using the prefix marker: [NO_ANSWER:NOT_IN_CORPUS] followed by a polite explanation.
 5. Action & Verification: When asked to add or save a study note, first call the write tool (add_study_note), then immediately call the read tool (get_study_notes) to verify the note before giving your Final Answer.
 6. Language: If the user asks in Vietnamese, reply in fluent, natural Vietnamese. If the user asks in English, reply in English.
+7. Efficiency: Do not call search_lesson_plan multiple times with repetitive queries. If the observation contains sufficient facts to answer the question, proceed directly to Final Answer without making redundant tool calls.
 """
 
 def format_tools_doc(tools_list: list[Any]) -> str:

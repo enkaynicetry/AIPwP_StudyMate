@@ -83,3 +83,17 @@ class StudyNote:
     content: str
     week: int = 0
     created_at: str = ""
+
+# --- Cấu trúc dữ liệu cho Đánh giá Benchmark (Lab 5 Evaluation) ---
+
+@dataclass
+class JudgeResult:
+    item_id: str
+    passed: bool
+    faithfulness_score: float
+    citation_score: float
+    refusal_pass: bool
+    action_verify_pass: bool
+    claims: list[dict[str, Any]] = field(default_factory=list)
+    notes: str = ""
+
