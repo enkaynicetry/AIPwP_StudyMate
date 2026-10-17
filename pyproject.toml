@@ -22,7 +22,7 @@ dependencies = [
 ]
 
 [project.scripts]
-studymate = "studymate.main:main"
+studymate = "studymate.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
