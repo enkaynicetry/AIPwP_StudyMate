@@ -1,6 +1,6 @@
 # StudyMate — Trợ lý học tập trên Lesson Plan môn học
 
-> **Trường Đại học Sư phạm Kỹ thuật TP.HCM (HCMUTE)**  
+> **Trường Đại học Công nghệ Kỹ thuật TP.HCM (HCMUTE)**  
 > **Khoa Công nghệ Thông tin — Bộ môn Trí tuệ Nhân tạo**  
 > **Môn học:** AI Programming with Python (AIPwP)  
 > **Đề tài (Topic T3):** Trợ lý học tập trên giáo trình và kế hoạch bài dạy môn học  
