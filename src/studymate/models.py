@@ -51,8 +51,6 @@ class Usage:
         if prompt > self.max_prompt:
             self.max_prompt = prompt
 
-# --- Cấu trúc dữ liệu cho Agent & Tool (Tuần 6 & 7) ---
-
 @dataclass
 class ToolSpec:
     name: str
@@ -85,5 +83,3 @@ class StudyNote:
     content: str
     week: int = 0
     created_at: str = ""
-
-

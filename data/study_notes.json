@@ -1,0 +1,16 @@
+[
+  {
+    "note_id": "note_001",
+    "topic": "Ôn tập MCP Server",
+    "content": "Kiểm tra cơ chế JSON-RPC stdio và tool verify trong FinalProject StudyMate.",
+    "week": 6,
+    "created_at": "2026-10-16 16:33:01 UTC"
+  },
+  {
+    "note_id": "note_002",
+    "topic": "Ôn tập MCP Server",
+    "content": "Kiểm tra cơ chế JSON-RPC stdio và tool verify.",
+    "week": 7,
+    "created_at": "2026-10-16 16:33:53 UTC"
+  }
+]
