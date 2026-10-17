@@ -13,3 +13,7 @@ uv.lock
 .env
 *.log
 .pytest_cache/
+
+# IDE & Editor settings
+.vscode/
+.idea/
