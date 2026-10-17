@@ -13,7 +13,7 @@ if sys.platform == "win32" and hasattr(sys.stdout, "reconfigure"):
 
 
 BANNER = """======================================================================
-  🎓 STUDYMATE — TRỢ LÝ HỌC TẬP AI PROGRAMMING WITH PYTHON (AIPwP) 🎓
+  STUDYMATE — TRỢ LÝ HỌC TẬP AI PROGRAMMING WITH PYTHON (AIPwP)
 ======================================================================
 Nhập câu hỏi của bạn (hoặc gõ 'exit'/'quit'/'q' để thoát)."""
 
@@ -56,7 +56,7 @@ def format_trace_step(step_data: dict[str, Any], obs_text: str | None = None) ->
 def print_trace(trace: list[dict[str, Any]], observations: list[str]) -> None:
     """In chi tiết toàn bộ vết suy luận nếu bật cờ --verbose."""
     print("\n" + "-" * 70)
-    print(" 🔍 VẾT SUY LUẬN TỪNG BƯỚC (REACT TRACE):")
+    print(" VẾT SUY LUẬN TỪNG BƯỚC (REACT TRACE):")
     print("-" * 70)
     obs_idx = 0
     for s in trace:
@@ -91,7 +91,7 @@ def run_single_question(question: str, verbose: bool = False) -> None:
         return
 
     print(f"\n[Sinh viên] > {clean_q}")
-    print("⏳ StudyMate đang suy luận qua bài giảng...")
+    print("StudyMate đang suy luận qua bài giảng...")
 
     result = asyncio.run(run_agent(question=clean_q, max_steps=10))
     display_agent_result(result, verbose=verbose)
@@ -101,13 +101,13 @@ def start_interactive_cli(verbose: bool = False) -> None:
     """Vòng lặp Chat REPL tương tác trực tiếp với sinh viên trên Terminal."""
     print(BANNER)
     if verbose:
-        print("💡 Chế độ VERBOSE đang bật: Toàn bộ Thought/Action/Observation sẽ được hiển thị.")
+        print("Chế độ VERBOSE đang bật: Toàn bộ Thought/Action/Observation sẽ được hiển thị.")
 
     while True:
         try:
             user_input = input("\n[Sinh viên] > ").strip()
         except (KeyboardInterrupt, EOFError):
-            print("\n\nCảm ơn bạn đã sử dụng StudyMate! Chúc bạn học tốt! 🎓")
+            print("\n\nCảm ơn bạn đã sử dụng StudyMate! Chúc bạn học tốt!")
             break
 
         if not user_input:
@@ -115,10 +115,10 @@ def start_interactive_cli(verbose: bool = False) -> None:
             continue
 
         if user_input.lower() in ["exit", "quit", "q"]:
-            print("\nCảm ơn bạn đã sử dụng StudyMate! Chúc bạn học tốt môn AIPwP! 🎓")
+            print("\nCảm ơn bạn đã sử dụng StudyMate! Chúc bạn học tốt môn AIPwP!")
             break
 
-        print("⏳ StudyMate đang suy luận qua bài giảng...")
+        print("StudyMate đang suy luận qua bài giảng...")
         try:
             result = asyncio.run(run_agent(question=user_input, max_steps=10))
             display_agent_result(result, verbose=verbose)
@@ -153,7 +153,7 @@ def run_demo(verbose: bool = False) -> None:
     3. Action & Verify: Ghi dữ liệu và tự động kiểm chứng trước khi trả lời.
     """
     print("\n" + "=" * 70)
-    print("  🚀 KHỞI CHẠY KỊCH BẢN DEMO TỰ ĐỘNG 3 TẦNG NĂNG LỰC (STUDYMATE) 🚀")
+    print("  KHỞI CHẠY KỊCH BẢN DEMO TỰ ĐỘNG 3 TẦNG NĂNG LỰC (STUDYMATE)")
     print("=" * 70)
     print(f"Tổng số kịch bản: {len(DEMO_SCENARIOS)}")
     if verbose:
@@ -166,7 +166,7 @@ def run_demo(verbose: bool = False) -> None:
         print(f" Mục tiêu: {item['goal']}")
         print(f"{'#' * 70}")
         print(f"\n[Sinh viên] > {item['question']}")
-        print("⏳ StudyMate đang suy luận qua bài giảng...")
+        print("StudyMate đang suy luận qua bài giảng...")
 
         try:
             result = asyncio.run(run_agent(question=item["question"], max_steps=10))
@@ -175,7 +175,7 @@ def run_demo(verbose: bool = False) -> None:
             print(f"\n[Lỗi kịch bản {idx}]: {err}")
 
     print("\n" + "=" * 70)
-    print("  🎉 HOÀN THÀNH TOÀN BỘ KỊCH BẢN DEMO 3 TẦNG CỦA STUDYMATE 🎉")
+    print("  HOÀN THÀNH TOÀN BỘ KỊCH BẢN DEMO 3 TẦNG CỦA STUDYMATE")
     print("=" * 70 + "\n")
 
 
