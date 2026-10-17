@@ -1,0 +1,11 @@
+id,category,expected,dense_top,dense_hit,dense_top1,hybrid_top,hybrid_hit,hybrid_top1,dense_time_ms,hybrid_time_ms
+q01,direct,AIPwP-W01,AIPwP-W01,True,True,AIPwP-W01,True,True,1141.3,1509.3
+q02,direct,AIPwP-W04,AIPwP-W04,True,True,AIPwP-W04,True,True,758.1,1612.7
+q03,direct,AIPwP-W02,AIPwP-W02,True,True,AIPwP-W02,True,True,755.2,1656.6
+q04,direct,AIPwP-W05,AIPwP-W05,True,True,AIPwP-W05,True,True,726.7,1389.2
+q05,synthesis,"AIPwP-W03,AIPwP-W04",AIPwP-W04,True,True,AIPwP-W04,True,True,956.6,2365.5
+q06,synthesis,"AIPwP-W04,AIPwP-W06",AIPwP-W06,True,True,AIPwP-W06,True,True,759.4,1918.3
+q07,synthesis,"AIPwP-W01,AIPwP-W02",AIPwP-W01,True,True,AIPwP-W03,True,False,768.2,2073.0
+q12,action,AIPwP-W05,None,False,False,AIPwP-W02,True,False,862.4,1632.2
+q13,action,AIPwP-W04,AIPwP-W04,True,True,AIPwP-W04,True,True,728.1,1722.9
+q14,action,AIPwP-W06,AIPwP-W06,True,True,AIPwP-W06,True,True,797.3,1551.2
