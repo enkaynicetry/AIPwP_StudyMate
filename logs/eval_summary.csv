@@ -1,0 +1,3 @@
+item_id,lang,category,passed,faithfulness,citation,tokens,elapsed_seconds
+q01,VI,direct,True,1.000,1.000,2968,4.74
+q02,EN,direct,True,1.000,1.000,2862,3.95

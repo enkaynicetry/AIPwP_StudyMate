@@ -1,68 +1,104 @@
-# StudyMate — Trợ lý học tập trên lesson plan môn học
+# StudyMate — Trợ lý học tập trên Lesson Plan môn học
 
-> **Môn học:** AI Programming with Python — HCMUTE  
-> **Đề tài:** Trợ lý học tập trên lesson plan & tài liệu môn học  
-> **Dữ liệu bài giảng:** Giáo trình & Kế hoạch bài dạy 6 tuần của môn học AI Programming with Python (`w1` đến `w6`).
-
----
-
-## 1. Cấu trúc thư mục dự án
-
-```text
-AIPwP/
-├── data/                                  # Dữ liệu bài giảng 6 tuần môn học
-│   ├── w1_lecture_notes.md                # Bài giảng Tuần 1: Python Data Structures for AI
-│   ├── w2_lecture_notes.md                # Bài giảng Tuần 2: LLM API Access & Integration
-│   ├── w3_lecture_notes.md                # Bài giảng Tuần 3: RAG Foundations: Documents & Embeddings
-│   ├── w4_lecture_notes.md                # Bài giảng Tuần 4: Building the RAG Pipeline
-│   ├── w5_lecture_notes.md                # Bài giảng Tuần 5: RAG Evaluation & Groundedness
-│   └── w6_lecture_notes.md                # Bài giảng Tuần 6: Agent Loop, ReAct & Agent Memory
-│
-├── src/studymate/                         # Mã nguồn gói studymate
-│   ├── __init__.py                        # Khởi tạo package studymate
-│   ├── config.py                          # Quản lý cấu hình hệ thống & nạp biến môi trường
-│   ├── models.py                          # Định nghĩa cấu trúc dữ liệu OOP (@dataclass)
-│   └── rag/                               # Phân hệ RAG (Retrieval-Augmented Generation)
-│       ├── __init__.py
-│       └── corpus.py                      # Tách YAML front-matter & chia chunk tài liệu markdown
-│
-├── tests/                                 # Thư mục kiểm thử (Unit tests)
-│   └── test_corpus.py                     # Kiểm thử đọc front-matter và nạp toàn bộ bài giảng
-│
-├── .env.example                           # Mẫu cấu hình API key
-├── .gitignore                             # Cấu hình loại trừ file cache, môi trường ảo
-├── pyproject.toml                         # Khai báo cấu hình gói và dependencies
-└── README.md                              # Tài liệu hướng dẫn & cấu trúc dự án
-```
+> **Trường Đại học Sư phạm Kỹ thuật TP.HCM (HCMUTE)**  
+> **Khoa Công nghệ Thông tin — Bộ môn Trí tuệ Nhân tạo**  
+> **Môn học:** AI Programming with Python (AIPwP)  
+> **Đề tài (Topic T3):** Trợ lý học tập trên giáo trình và kế hoạch bài dạy môn học  
+> **Nhóm sinh viên thực hiện:** Khuê & Hiển  
+> **Cơ sở dữ liệu tri thức:** 6 bài giảng môn học từ Tuần 1 đến Tuần 6 (`AIPwP-W01` đến `AIPwP-W06`).
 
 ---
 
-## 2. Hướng dẫn cài đặt & Thiết lập ban đầu
+## 1. Lệnh chạy ứng dụng
 
-### Bước 1: Cài đặt môi trường ảo
-Khởi tạo và kích hoạt môi trường ảo Python (>= 3.11):
+Theo yêu cầu của đề tài, toàn bộ các tác vụ chính của dự án được cấu hình sẵn trong `Makefile` để thực thi nhanh chóng:
+
+| Tác vụ | Lệnh make | Chức năng chi tiết |
+| :--- | :--- | :--- |
+| **Chạy Demo 3 tầng (Cold Start)** | `make setup && make demo` | Tự động tạo chỉ mục offline và chạy kịch bản Demo 3 tầng năng lực theo rubric (không cần nhập tay câu hỏi). |
+| **Đánh giá Benchmark (Lab 5)** | `make eval` | Tự động chạy 14 câu hỏi kiểm thử song ngữ, đo lường độ trung thực (Faithfulness) và xuất log JSONL + CSV. |
+| **So sánh cấu hình RAG (Bonus)** | `make compare` | So sánh đối đầu giữa 2 cấu hình tìm kiếm: Dense-only (Jina) vs Hybrid (BM25 + Dense). |
+| **Kiểm chứng Interop (Bonus)** | `make interop` | Chạy Client Python thứ hai độc lập để chứng minh tính tương tác của MCP Server. |
+| **Trò chuyện trực tiếp (CLI)** | `make chat` | Khởi động giao diện dòng lệnh tương tác hỏi đáp liên tục với StudyMate. |
+| **Kiểm thử hệ thống (Unit Test)** | `make test` | Chạy toàn bộ 4 file kiểm thử trong thư mục `tests/`. |
+
+---
+
+## 2. Hướng dẫn cài đặt & Thiết lập môi trường
+
+### Bước 1: Khởi tạo và kích hoạt môi trường ảo Python (>= 3.11)
 ```bash
 python -m venv .venv
 
 # Kích hoạt trên Windows PowerShell:
 .venv\Scripts\Activate.ps1
 
-# Cài đặt các gói phụ thuộc ở chế độ editable:
+# Kích hoạt trên Linux / macOS:
+source .venv/bin/activate
+```
+
+### Bước 2: Cài đặt các thư viện phụ thuộc ở chế độ editable
+```bash
 pip install -e .
 ```
 
-### Bước 2: Cấu hình biến môi trường
-Sao chép `.env.example` thành `.env` và điền các khóa API:
+### Bước 3: Cấu hình biến môi trường
+Tạo file `.env` từ file mẫu `.env.example` và điền các khóa API:
 ```ini
 GROQ_API_KEY=your_groq_api_key_here
 JINA_API_KEY=your_jina_api_key_here
-LLM_MODEL=openai/gpt-oss-20b
+LLM_MODEL=qwen/qwen-2.5-32b
 ```
 
+---
 
-## 3. Kế hoạch phát triển các module tiếp theo
+## 3. Cấu trúc cây thư mục dự án
 
-- **Module Vector Store & Search (`src/studymate/rag/`):** Tích hợp Jina AI embedding (`store.py`), thuật toán tìm kiếm kết hợp Hybrid Search BM25 + Dense vector (`hybrid_search.py`, `search.py`).
-- **Module LLM (`src/studymate/llm.py`):** Kết nối Groq API gọi LLM xử lý câu hỏi sinh viên, quản lý retry và thống kê token usage.
-- **Tools (`tools/`):** Script `build_index.py` tạo chỉ mục vector offline lưu tại `data/index.json`.
-- **Giao diện dòng lệnh (CLI):** Cung cấp giao diện tương tác trực tiếp cho sinh viên hỏi đáp.
+```text
+AIPwP/
+├── data/                                  # Cơ sở tri thức bài giảng & cơ sở dữ liệu
+│   ├── w1_lecture_notes.md ... w6...      # 6 bài giảng Markdown kèm YAML front-matter
+│   ├── index.json                         # Chỉ mục vector & BM25 tạo trước offline
+│   └── study_notes.json                   # Cơ sở dữ liệu ghi chú ôn tập của sinh viên
+│
+├── src/studymate/                         # Mã nguồn gói studymate
+│   ├── __init__.py                        # Khởi tạo package
+│   ├── config.py                          # Cấu hình hệ thống & nạp biến môi trường
+│   ├── models.py                          # Định nghĩa dữ liệu hướng đối tượng qua @dataclass
+│   ├── llm.py                             # Giao tiếp Groq API, quản lý retry và token usage
+│   ├── mcp_server.py                      # MCP Stdio Server (5 tools, stdout sạch)
+│   ├── agent.py                           # Vòng lặp ReAct Agent & Guard Verify
+│   ├── agent_support.py                   # System prompt ReAct và hàm parse_reply
+│   ├── cli.py                             # Giao diện dòng lệnh & kịch bản demo 3 tầng
+│   ├── main.py                            # Điểm nhập chính của chương trình
+│   │
+│   ├── rag/                               # Phân hệ Hybrid RAG
+│   │   ├── corpus.py                      # Bóc tách front-matter & chia chunk Markdown
+│   │   ├── store.py                       # Vector Store kết nối Jina AI Embeddings
+│   │   ├── search.py                      # Tìm kiếm bài giảng có lọc metadata
+│   │   └── hybrid_search.py               # Thuật toán kết hợp BM25 + Dense vectors
+│   │
+│   └── eval/                              # Phân hệ Đánh giá Benchmark (Lab 5)
+│       ├── __init__.py
+│       ├── judge.py                       # LLM-as-a-Judge đánh giá Atomic Claims
+│       └── run_eval.py                    # Runner chạy đánh giá & so sánh cấu hình
+│
+├── tests/                                 # Bộ kiểm thử Unit test & Benchmark Testset
+│   ├── test_corpus.py                     # Kiểm thử nạp bài giảng
+│   ├── test_search.py                     # Kiểm thử Hybrid Search & Metadata Filter
+│   ├── test_mcp.py                        # Kiểm thử MCP Server qua giao thức Stdio
+│   ├── test_agent.py                      # Kiểm thử ReAct loop & parse cú pháp
+│   └── testset.jsonl                      # 14 câu hỏi benchmark song ngữ chuẩn rubric
+│
+├── tools/                                 # Script tiền xử lý dữ liệu
+│   └── build_index.py                     # Tạo chỉ mục vector & BM25 offline
+│
+├── scripts/                               # Kịch bản phụ trợ
+│   └── mcp_client_interop.py              # Client thứ hai kiểm chứng MCP Interoperability
+│
+├── logs/                                  # Nhật ký thực thi server và lịch sử chạy eval (.jsonl, .csv)
+├── Makefile                               # Tự động hóa các tác vụ dòng lệnh
+├── ai-usage.md                            # Báo cáo chi tiết minh bạch về việc sử dụng AI
+├── pyproject.toml                         # Khai báo gói và thư viện phụ thuộc
+└── README.md                              # Hướng dẫn đồ án
+```
