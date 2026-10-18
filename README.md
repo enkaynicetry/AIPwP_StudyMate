@@ -1,7 +1,7 @@
 # StudyMate — Trợ lý học tập trên Lesson Plan môn học
 
-> **Trường Đại học Công nghệ Kỹ thuật TP.HCM (HCMUTE)**  
-> **Khoa Công nghệ Thông tin — Bộ môn Trí tuệ Nhân tạo**  
+> **Trường Đại học Công nghệ Kỹ thuật TP.HCM (HCM-UTE)**  
+> **Khoa Đào tạo tiên tiến — Ngành Công nghệ Thông tin**  
 > **Môn học:** AI Programming with Python (AIPwP)  
 > **Đề tài (Topic T3):** Trợ lý học tập trên giáo trình và kế hoạch bài dạy môn học  
 > **Nhóm sinh viên thực hiện:** Khuê & Hiển  
@@ -9,22 +9,7 @@
 
 ---
 
-## 1. Lệnh chạy ứng dụng
-
-Theo yêu cầu của đề tài, toàn bộ các tác vụ chính của dự án được cấu hình sẵn trong `Makefile` để thực thi nhanh chóng:
-
-| Tác vụ | Lệnh make | Chức năng chi tiết |
-| :--- | :--- | :--- |
-| **Chạy Demo 3 tầng (Cold Start)** | `make setup && make demo` | Tự động tạo chỉ mục offline và chạy kịch bản Demo 3 tầng năng lực theo rubric (không cần nhập tay câu hỏi). |
-| **Đánh giá Benchmark (Lab 5)** | `make eval` | Tự động chạy 14 câu hỏi kiểm thử song ngữ, đo lường độ trung thực (Faithfulness) và xuất log JSONL + CSV. |
-| **So sánh cấu hình RAG (Bonus)** | `make compare` | So sánh đối đầu giữa 2 cấu hình tìm kiếm: Dense-only (Jina) vs Hybrid (BM25 + Dense). |
-| **Kiểm chứng Interop (Bonus)** | `make interop` | Chạy Client Python thứ hai độc lập để chứng minh tính tương tác của MCP Server. |
-| **Trò chuyện trực tiếp (CLI)** | `make chat` | Khởi động giao diện dòng lệnh tương tác hỏi đáp liên tục với StudyMate. |
-| **Kiểm thử hệ thống (Unit Test)** | `make test` | Chạy toàn bộ 4 file kiểm thử trong thư mục `tests/`. |
-
----
-
-## 2. Hướng dẫn cài đặt & Thiết lập môi trường
+## 1. Hướng dẫn cài đặt & Thiết lập môi trường
 
 ### Bước 1: Khởi tạo và kích hoạt môi trường ảo Python (>= 3.11)
 ```bash
@@ -49,6 +34,22 @@ GROQ_API_KEY=your_groq_api_key_here
 JINA_API_KEY=your_jina_api_key_here
 LLM_MODEL=qwen/qwen-2.5-32b
 ```
+
+---
+
+## 2. Lệnh chạy ứng dụng
+
+Sau khi hoàn tất cài đặt môi trường, toàn bộ các tác vụ chính của dự án được cấu hình sẵn qua `Makefile` (cho Linux / macOS / Git Bash) và hỗ trợ lệnh chạy trực tiếp qua `python` trên Windows PowerShell:
+
+| Tác vụ | Lệnh make (Linux / macOS / Git Bash) | Lệnh trực tiếp (Windows PowerShell) | Chức năng chi tiết |
+| :--- | :--- | :--- | :--- |
+| **Chạy Demo 3 tầng (Cold Start)** | `make demo` | `python -m studymate.main --demo` | Chạy kịch bản Demo 3 tầng năng lực theo rubric (không cần nhập tay). |
+| **Đánh giá Benchmark (Lab 5)** | `make eval` | `python -m studymate.eval.run_eval` | Chạy 14 câu hỏi kiểm thử song ngữ và xuất log JSONL + CSV. |
+| **So sánh cấu hình RAG (Bonus)** | `make compare` | `python -m studymate.eval.run_eval --compare` | So sánh đối đầu giữa 2 cấu hình: Dense-only vs Hybrid Search. |
+| **Kiểm chứng Interop (Bonus)** | `make interop` | `python scripts/mcp_client_interop.py` | Chạy Client Python thứ hai độc lập kiểm chứng MCP Server. |
+| **Trò chuyện trực tiếp (CLI)** | `make chat` | `python -m studymate.main` | Khởi động giao diện dòng lệnh tương tác hỏi đáp liên tục. |
+| **Kiểm thử hệ thống (Unit Test)** | `make test` | `pytest tests/` | Chạy toàn bộ các bài kiểm thử trong thư mục `tests/`. |
+| **Tạo lại chỉ mục offline** | `make setup` | `python tools/build_index.py` | Tạo vector embedding offline lưu vào `data/index.json`. |
 
 ---
 
